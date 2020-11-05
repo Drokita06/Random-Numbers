@@ -33,6 +33,7 @@ public class RestApiNumberGenerator implements RandomNumberGenerator {
 
     @Override
     public List<Integer> generateRandomNumbers(int min, int max, int count) {
+        LOGGER.info("Generating numbers using {} with params min {}, max {}, count {}", this.getClass().getName(), min, max, count);
         return getRandomNumberFromApi(min, max, count);
     }
 
@@ -49,7 +50,6 @@ public class RestApiNumberGenerator implements RandomNumberGenerator {
 
         try {
             String response = restTemplate.getForObject(uri, String.class);
-            LOGGER.info("Generating number using {}", RestApiNumberGenerator.class.toString());
             return Lists.newArrayList(Objects.requireNonNull(response).split("\\n"))
                     .stream()
                     .map(NumberUtils::toInt)

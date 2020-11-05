@@ -17,7 +17,7 @@ public class JavaRandomNumberGenerator implements RandomNumberGenerator {
 
     @Override
     public List<Integer> generateRandomNumbers(int min, int max, int count) {
-        LOGGER.info("Generating number using {}", JavaRandomNumberGenerator.class.toString());
+        LOGGER.info("Generating numbers using {} with params min {}, max {}, count {}", this.getClass().getName(), min, max, count);
         return IntStream.range(0, count)
                 .mapToObj(i -> (int) (Math.random() * ((max - min) + 1)) + min)
                 .collect(Collectors.toList());

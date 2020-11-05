@@ -1,16 +1,19 @@
 package com.drokita.service.impl;
 
 import com.drokita.generators.RandomNumberGenerator;
+import com.drokita.model.Operation;
 import com.drokita.service.RandomNumbersService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 @Service
 public class RandomNumbersServiceImpl implements RandomNumbersService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RandomNumbersServiceImpl.class);
 
     List<RandomNumberGenerator> generators;
 
@@ -18,22 +21,32 @@ public class RandomNumbersServiceImpl implements RandomNumbersService {
         this.generators = generators;
     }
 
-    @PostConstruct
-    void init() {
-
-    }
-
     @Override
-    public Integer getSumOfRandomNumbers(int min, int max, int count) {
-        validateInputsAndDefaultEmpty(min, max, count);
-        int sum = 0;
+    public Integer doOperationOnRandomNumbers(int min, int max, int count, Operation operation) {
+        Integer result = 0;
         for (RandomNumberGenerator generator : generators) {
-            sum += generator.generateRandomNumbers(min, max, count).stream().mapToInt(Integer::intValue).sum();
+            List<Integer> numbers = generator.generateRandomNumbers(min, max, count);
+            if (numbers.contains(0) && operation.equals(Operation.DIVISION)) {
+                LOGGER.warn("Generated numbers contains zero which is illegal to use for {} operation ", operation);
+                break;
+            }
+            switch (operation) {
+                case ADDITION:
+                    result += numbers.stream().reduce(0, Integer::sum);
+                    break;
+                case SUBTRACTION:
+                    result += numbers.stream().reduce(0, Math::subtractExact);
+                    break;
+                case MULTIPLICATION:
+                    result += numbers.stream().reduce(1, Math::multiplyExact);
+                    break;
+                case DIVISION:
+                    result += numbers.stream().reduce(1, Math::floorDiv);
+                    break;
+            }
         }
-        return sum;
-    }
+        return result;
 
-    private void validateInputsAndDefaultEmpty(int min, int max, int count) {
-
+        Expression
     }
 }
