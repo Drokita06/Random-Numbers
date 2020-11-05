@@ -1,6 +1,5 @@
 package com.drokita.generators;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface RandomNumberGenerator {

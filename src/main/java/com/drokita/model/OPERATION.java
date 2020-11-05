@@ -1,6 +1,6 @@
 package com.drokita.model;
 
-public enum Operation {
+public enum OPERATION {
     ADDITION("+"),
     SUBTRACTION("-"),
     MULTIPLICATION("*"),
@@ -8,7 +8,7 @@ public enum Operation {
 
     private final String sign;
 
-    Operation(String sign) {
+    OPERATION(String sign) {
         this.sign = sign;
     }
 
